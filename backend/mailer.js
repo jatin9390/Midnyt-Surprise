@@ -19,6 +19,8 @@ const sendBirthdayEmail = async (settings) => {
         finalAppUrl = `${finalAppUrl}/?id=${settings.message._id}`;
     }
 
+    console.log(`📧 Preparing email with link: ${finalAppUrl}`);
+
     const mailOptions = {
         from: `"Midnyt Surprise" <${process.env.EMAIL_USER}>`,
         to: settings.recipientEmail,

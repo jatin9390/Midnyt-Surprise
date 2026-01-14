@@ -35,7 +35,9 @@ const BirthdayPage = () => {
         if (data.recipientName) setName(data.recipientName);
         setMessage(data); // Pass full data object (content, images, senderName)
       })
-      .catch(() => { });
+      .catch((e) => {
+        console.error("API Fetch Error:", e);
+      });
   }, []);
 
   return (
