@@ -19,6 +19,7 @@ const ThemeToggle = ({ theme, toggleTheme }) => (
 const BirthdayPage = () => {
   const [name, setName] = useState('Friend');
   const [message, setMessage] = useState({});
+  const [error, setError] = useState('');
 
   useEffect(() => {
     // Check for ID in URL (e.g. ?id=123)
@@ -30,15 +31,31 @@ const BirthdayPage = () => {
       : '/api/public-config';
 
     fetch(fetchUrl)
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to load surprise');
+        return res.json();
+      })
       .then(data => {
         if (data.recipientName) setName(data.recipientName);
         setMessage(data); // Pass full data object (content, images, senderName)
       })
       .catch((e) => {
         console.error("API Fetch Error:", e);
+        setError("Could not load your surprise. Please try again later.");
       });
   }, []);
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white p-4 text-center">
+        <div>
+          <h1 className="text-2xl font-bold text-red-400 mb-2">Oops!</h1>
+          <p>{error}</p>
+          <p className="text-sm text-gray-400 mt-4">Debug: Check internet or invalid link.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-purple-50 dark:bg-midnyt-dark text-slate-900 dark:text-gray-100 font-sans relative transition-colors duration-500">
