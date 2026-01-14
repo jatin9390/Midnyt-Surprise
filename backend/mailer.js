@@ -12,7 +12,14 @@ const sendBirthdayEmail = async (settings) => {
     });
 
     const senderName = settings.senderName || "A Friend";
-    let finalAppUrl = process.env.APP_URL || 'http://localhost:5173';
+    // Smart fallback: 1. Explicit APP_URL 2. Vercel Auto-URL 3. Localhost
+    let finalAppUrl = process.env.APP_URL;
+    if (!finalAppUrl && process.env.VERCEL_URL) {
+        finalAppUrl = `https://${process.env.VERCEL_URL}`;
+    }
+    if (!finalAppUrl) {
+        finalAppUrl = 'http://localhost:5173';
+    }
 
     // Append Unique ID if available
     if (settings.message && settings.message._id) {
