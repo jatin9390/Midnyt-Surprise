@@ -1,11 +1,12 @@
 require('dotenv').config();
-const mongoose = require('mongoose');
+const connectDB = require('./db');
+// const mongoose = require('mongoose'); // Removed to avoid direct connect
 const Settings = require('./models/Settings');
 const mailer = require('./mailer');
 
 const testEmail = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URI);
+        await connectDB(); // Use the robust connection logic
         console.log("✅ DB Connected");
 
         const settings = await Settings.findOne().sort({ createdAt: -1 });
