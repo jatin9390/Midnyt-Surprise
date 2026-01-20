@@ -11,7 +11,13 @@ const app = express();
 // Note: In serverless, we must handle connection reuse carefully.
 // Mongoose 5+ handles buffering, so just calling connectDB is usually fine.
 // However, we should await it if possible, but Express handlers can be async.
+// Initialize DB Connection
 connectDB();
+
+// Initialize Scheduler (Note: In Vercel Serverless, this only runs while the instance is hot. 
+// For production reliability, use Vercel Cron Jobs to hit an endpoint.)
+const scheduler = require('../backend/scheduler');
+scheduler.initScheduler();
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
